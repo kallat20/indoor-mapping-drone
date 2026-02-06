@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.9">
+    <model name="lidar_240">
+        <link name="lidar_link">
+            <inertial>
+                <mass>0.015</mass>
+                <inertia>
+                    <ixx>0.001</ixx><ixy>0</ixy><ixz>0</ixz>
+                    <iyy>0.001</iyy><iyz>0</iyz>
+                    <izz>0.001</izz>
+                </inertia>
+            </inertial>
+            <visual name="visual">
+                <pose>0 0 0 1.57 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://lidar_240/meshes/kutu.stl</uri>
+                        <scale>1 1 1</scale>
+                    </mesh>
+                </geometry>
+                <material>
+                    <diffuse>0.1 0.1 0.1 1</diffuse>
+                </material>
+            </visual>
+                
+            <sensor name="lidar_240" type="gpu_lidar">
+                <pose>0 0 0 0 0 0</pose>
+                <topic>scan</topic>
+                <update_rate>20</update_rate>
+                <gz_frame_id>lidar_240_link</gz_frame_id>
+                <lidar>
+                    <scan>
+                        <horizontal>
+                            <samples>1080</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-2.0944</min_angle>
+                            <max_angle>2.0944</max_angle>
+                        </horizontal>
+                    </scan>
+                    <range>
+                        <min>0.10</min>
+                        <max>10.0</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.01</stddev>
+                    </noise>
+                </lidar>
+                <always_on>1</always_on>
+                <visualize>true</visualize>
+            </sensor>
+        </link>
+    </model>
+</sdf>
+                    
+            

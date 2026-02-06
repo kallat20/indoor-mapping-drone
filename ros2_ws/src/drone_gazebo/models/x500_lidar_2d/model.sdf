@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version='1.9'>
+  <model name='x500_lidar_2d'>
+    <include merge='true'>
+      <uri>x500</uri>
+    </include>
+    <include>
+      <uri>model://lidar_240</uri>
+      <pose relative_to="base_link">0 0 0.07 0 0 0</pose>
+      <name>lidar_240</name>
+    </include>
+    <include>
+      <uri>model://pi_cam</uri>
+      <pose relative_to="base_link">0.15 0 0.03 0 0 0</pose>
+      <name>pi_cam</name>
+    </include>
+
+    <joint name="lidar_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>lidar_240::lidar_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1.575</lower>
+          <upper>1.57</upper>
+          <effort>10</effort>
+          <velocity>5.0</velocity>
+        </limit>
+      </axis>
+    </joint>
+
+    <joint name="pi_cam_mount_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>pi_cam::camera_link</child>
+    </joint>
+        
+    <plugin 
+      filename="libgz-sim-joint-position-controller-system.so" 
+      name="gz::sim::systems::JointPositionController">
+        <joint_name>lidar_joint</joint_name>
+        <topic>/lidar_cmd</topic>
+        <p_gain>10.0</p_gain>
+        <i_gain>0.1</i_gain>
+        <d_gain>0.01</d_gain>
+    </plugin>
+    <plugin 
+      filename="libgz-sim-joint-state-publisher-system.so"
+      name="gz::sim::systems::JointStatePublisher">
+      <topic>/joint_states</topic>
+      <joint_name>lidar_joint</joint_name>
+    </plugin>
+    <plugin 
+      filename="libgz-sim-pose-publisher-system.so"
+      name="gz::sim::systems::PosePublisher">
+      <publish_link_pose>true</publish_link_pose>
+      <use_pose_vector_msg>true</use_pose_vector_msg>
+      <static_publisher>true</static_publisher>
+      <static_update_frequency>1.0</static_update_frequency>
+    </plugin>
+  </model>
+</sdf>
