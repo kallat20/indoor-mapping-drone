@@ -1,0 +1,26 @@
+<launch>
+    <append_env name="GZ_SIM_RESOURCE_PATH" value="$(find-pkg-share drone_gazebo)" />
+    <append_env name="GZ_SIM_RESOURCE_PATH" value="$(find-pkg-share drone_gazebo)/models" />
+
+    <!-- world seçimi --> 
+    <arg name="world" default="tugbot_depot.sdf" />
+
+    <!-- Gazebo konak yolları -->
+    <append_env name="GZ_SIM_RESOURCES_PATH" value="$(find-pkg-share drone_gazebo)/models" />
+
+    <!-- Gazebo başlat -->
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+    <arg name="gz_args" value="-r $(find-pkg-share drone_gazebo)/worlds/$(var world)" />
+    </include>
+
+    <!-- Drone modeli spawn et -->
+    <node pkg="ros_gz_sim"
+          exec="create"
+          name="spawn_x500"
+          output="screen"
+          args="-name x500_lidar_2d
+                -x 0 -y 0 -z 0.5
+                -R 0 -P 0 -Y 0
+                -file $(find-pkg-share drone_gazebo)/models/x500_lidar_2d/model.sdf" >
+    </node>
+</launch>
