@@ -23,4 +23,37 @@
                 -R 0 -P 0 -Y 0
                 -file $(find-pkg-share drone_gazebo)/models/x500_lidar_2d/model.sdf" >
     </node>
+
+    <!-- Bridges: Gazebo -> ROS2 -->
+    <node pkg="ros_gz_bridge" exec="parameter_bridge" name="bridge_sensors" output="screen"
+      args="
+        /clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock                      
+        /scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan                     
+        /pi_camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image                  
+        /pi_camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo      
+      ">
+    </node>
+
+    <!-- TF bridge -->
+    <node pkg="ros_gz_bridge" exec="parameter_bridge" name="bridge_tf" output="screen"
+            args="/model/x500_lidar_2d/pose@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V">
+        <remap from="/model/x500_lidar_2d/pose" to="/tf"/>
+    </node>
+
+    <!-- Tf bağıntıları -->
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="tf_lidar"       
+      args="0 0 0.07 0 0 0 base_link lidar_240_link"
+      output="screen">
+    </node>
+
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="tf_camera"
+      args="0.15 0 0.03 0 0 0 base_link pi_camera_link"
+      output="screen">
+    </node>
+
+    <!-- base_link x500_lidar_2d static tf bağlantısı-->
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="tf_base_to_model"
+      args="0 0 0 0 0 0 base_link x500_lidar_2d --ros-args -p use_sim_time:=true"
+      output="screen">
+    </node>  
 </launch>
