@@ -54,7 +54,7 @@
       name="gz::sim::systems::PosePublisher">
       <publish_link_pose>true</publish_link_pose>
       <use_pose_vector_msg>true</use_pose_vector_msg>
-      <static_publisher>true</static_publisher>
+      <static_publisher>false</static_publisher>
       <static_update_frequency>1.0</static_update_frequency>
     </plugin>
   </model>
